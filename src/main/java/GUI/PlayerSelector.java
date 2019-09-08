@@ -1,5 +1,7 @@
 package GUI;
 
+import logical.Player;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,7 +46,7 @@ public class PlayerSelector {
                 // I need to find some way to pass this data back into the other GUI
                 System.out.println("Creating New Player: " + firstNameInput.getText() + ", " + lastNameInput.getText() + ", " + getGraduationYear());
 
-
+                s.setPlayer(position, new Player(firstNameInput.getText(), lastNameInput.getText(), getGraduationYear()));
 
                 frame.dispose();
             }

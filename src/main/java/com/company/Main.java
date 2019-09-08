@@ -21,10 +21,10 @@ public class Main extends Thread{
             Setup s = new Setup();
 
         // this is kind of crude way to load the program but I think it will do fine
+
         while(!s.startGame){
             Thread.sleep(30);
         }
-
         System.out.println("Starting Game");
 
         // this will set up the Game Classes

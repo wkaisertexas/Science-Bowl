@@ -143,27 +143,35 @@ public class Setup {
         switch(position){
             case "A1" :
                 teamA[0] = player;
+                a1Label.setText("A1: " + player.firstName + ", " + player.lastName);
                 break;
             case "AC" :
                 teamA[1] = player;
+                acLabel.setText("AC: " + player.firstName + ", " + player.lastName);
                 break;
             case "A3" :
                 teamA[2] = player;
+                a3Label.setText("A3: " + player.firstName + ", " + player.lastName);
                 break;
             case "A4":
                 teamA[3] = player;
+                a4Label.setText("A4: " + player.firstName + ", " + player.lastName);
                 break;
             case "B1" :
                 teamB[0] = player;
+                b1Label.setText("B1: " + player.firstName + ", " + player.lastName);
                 break;
             case "BC" :
                 teamB[1] = player;
+                bcLabel.setText("BC: " + player.firstName + ", " + player.lastName);
                 break;
             case "B3" :
                 teamB[2] = player;
+                b3Label.setText("B3: " + player.firstName + ", " + player.lastName);
                 break;
             case "B4" :
                 teamB[3] = player;
+                b4Label.setText("B4: " + player.firstName + ", " + player.lastName);
                 break;
             default :
                 System.err.println("Error there is no position named: " + position);
