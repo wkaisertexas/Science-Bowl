@@ -5,11 +5,16 @@ public class Game { // this will store all of the relevant information to a game
     public Player[] aTeam;
     public Player[] bTeam;
 
-    public Game(Player[] aTeam, Player[] bTeam){
+
+    public Generator gen;
+
+    public Game(Player[] aTeam, Player[] bTeam, String databasePath, String saveLocationPath, double targetDifficulty){
         // this saves the player array
         this.aTeam = aTeam;
         this.bTeam = bTeam;
 
+
+        gen = new Generator(databasePath, targetDifficulty);
     }
 
 

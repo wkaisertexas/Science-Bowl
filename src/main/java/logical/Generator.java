@@ -13,13 +13,23 @@ import org.json.simple.parser.ParseException;
 public class Generator {
     // variables declaration
 
+    public double targetDifficulty;
+
     // end of variables declaration
 
-
-    public Generator(String databasePath){
+    public Generator(String databasePath, double targetDifficulty){
+        this.targetDifficulty = targetDifficulty;
 
         loadDatabase(databasePath);
     }
+
+    public Question generateQuestion(){ // blank for now
+        return null;
+
+    }
+
+
+
 
     private void loadDatabase(String databasePath){
         JSONParser jsonParser = new JSONParser();
@@ -39,5 +49,8 @@ public class Generator {
             e.printStackTrace();
         }
     }
+
+
+
 
 }

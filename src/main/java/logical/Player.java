@@ -1,17 +1,26 @@
 package logical;
 
-public class Player {  // this is only a very basic class that stores information about a player inside it
-    public String first;
-    public String last;
-    public int graduatingYear;
+import org.json.simple.JSONObject;
 
-    public Player(String first, String last, int graduatingYear){
-        this.first = first;
-        this.last = last;
-        this.graduatingYear = graduatingYear;
+public class Player {  // this is only a very basic class that stores information about a player inside it
+    public String firstName;
+    public String lastName;
+    public int graduationYear;
+
+    public Player(String firstName, String lastName, int graduationYear){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.graduationYear = graduationYear;
     }
 
-    // this will load a player class from an object
+    // this is an alternate constructor that allows the player class to be loaded for a JSON file
+    public Player(JSONObject player){
+        // this will do all of the loading scripts for all of the necessary information
+        JSONObject playerDetails = (JSONObject) player.get("player"); // the demands a specific file structure for the JSON
 
+        this.firstName = (String) playerDetails.get("firstName");
+        this.lastName = (String) playerDetails.get("lastName");
+        this.graduationYear = (int) playerDetails.get("graduationYear");
+    }
 
 }

@@ -1,8 +1,12 @@
-package main.java.com.company;
+package com.company;
 
-public class Main {
+import GUI.Reader;
+import GUI.Setup;
+import GUI.Timer;
 
-    public static void main(String[] args) {
+public class Main extends Thread{
+
+    public static void main(String[] args) throws InterruptedException{
 	// write your code here
         System.out.println("Started Science Bowl Program");
 
@@ -14,8 +18,21 @@ public class Main {
 
 
             // this is the code that will run the setup GUI for the user to input the file data
+            Setup s = new Setup();
 
-        // this will load a game [in the future I think that I will make this a ]
+        // this is kind of crude way to load the program but I think it will do fine
+        while(!s.startGame){
+            Thread.sleep(30);
+        }
+
+        System.out.println("Starting Game");
+
+        // this will set up the Game Classes
+
+
+        // this will set up the GUI
+        Reader r = new Reader();
+        Timer t = new Timer();
 
 
 

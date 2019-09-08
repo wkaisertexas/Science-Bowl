@@ -1,5 +1,7 @@
 package logical;
 
+import org.json.simple.JSONObject;
+
 public class Question {
     // Variables Declaration
 
@@ -20,7 +22,7 @@ public class Question {
 
     // end of variables declaration
 
-    public Question(){
+    public Question(JSONObject question){
 
 
 
