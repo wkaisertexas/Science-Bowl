@@ -30,7 +30,7 @@ public class PlayerSelector {
         // this creates the JFrame
         frame = new JFrame();
         frame.setContentPane(this.main);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(750,600);
         frame.setLocation(250, 200);
         frame.setVisible(true);

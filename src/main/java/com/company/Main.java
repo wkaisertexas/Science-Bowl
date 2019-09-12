@@ -4,41 +4,39 @@ import GUI.Reader;
 import GUI.Setup;
 import GUI.Timer;
 
-public class Main extends Thread{
+import logical.Game;
 
-    public static void main(String[] args) throws InterruptedException{
-	// write your code here
+public class Main{
+    public Setup s;
+    public Game g;
+
+    public Reader r;
+    public Timer t;
+
+
+    private Main(){
+        // this launches the setup file
         System.out.println("Started Science Bowl Program");
+        s = new Setup(this);
+    }
 
-        // this is going to be the part of the code that will run the setup for this project
-
-            // this will load the properties for this project
-
-            // this is the code that will load the science fair database into a JSON file
-
-
-            // this is the code that will run the setup GUI for the user to input the file data
-            Setup s = new Setup();
-
-        // this is kind of crude way to load the program but I think it will do fine
-
-        while(!s.startGame){
-            Thread.sleep(30);
-        }
+    public void startGame(){
         System.out.println("Starting Game");
-
-        // this will set up the Game Classes
-
-
-        // this will set up the GUI
-        Reader r = new Reader();
-        Timer t = new Timer();
-
-
-
-
-
-
+        g = new Game(s.getTeamA(), s.getTeamB(), s.getDatabasePath(), s.getSaveLocation(), s.getTargetAccuracy(), this);
 
     }
+
+    public void gameComplete(){
+        // this is going to re-initiate the setup GUI and dispose of the game files
+        g = null; // this kills the game class (We have to make sure all of the GUI windows attached to the game are gone as well)
+
+        // this will reopen the setup
+        s.newGame();
+    }
+
+
+
+
+
+    public static void main(String[] args) throws InterruptedException{ Main m = new Main();}
 }

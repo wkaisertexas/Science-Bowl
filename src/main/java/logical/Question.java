@@ -22,17 +22,40 @@ public class Question {
 
     // end of variables declaration
 
-    public Question(JSONObject question){
-
-
-
+    Question(JSONObject q){
+        loadQuestionFromJSON(q);
     }
 
-    private void loadQuestionFromJSON(){
-        // this will be convert a JSON object into a question object
-
-
+    // accessor methods
+    public String tossupTypeToString(){
+        if(tossupType){
+            return "Multiple Choice";
+        } else{
+            return "Short Answer";
+        }
     }
 
+    public String bonusTypeToString(){
+        if(bonusType){
+            return "Multiple Choice";
+        } else{
+            return "Short Answer";
+        }
+    }
+
+    private void loadQuestionFromJSON(JSONObject q){
+        questionId = ((Long) q.get("id")).intValue();
+
+        category = (String) q.get("category");
+        source = (String) q.get("source");
+
+        tossupType = ((String) q.get("tossup_format")).equals("Multiple Choice");
+        tossupQuestion = (String) q.get("tossup_question");
+        tossupAnswer = (String) q.get("tossup_answer");
+
+        bonusType = ((String) q.get("bonus_format")).equals("Multiple Choice");
+        bonusQuestion = (String) q.get("bonus_question");
+        bonusAnswer = (String) q.get("bonus_answer");
+    }
 
 }
