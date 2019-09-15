@@ -26,6 +26,7 @@ public class Help {
                 {"B", "Blurt Key Modifier"},
                 {"I", "Interrupt Key Modifier"},
                 {"C", "Conversing Penalty Key Modifier"},
+                {"X", "Incorrect"},
 
                 {"Q", "A1"},
                 {"W", "AC"},

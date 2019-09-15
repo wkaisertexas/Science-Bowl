@@ -71,10 +71,8 @@ public class Setup {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("Start Game Button Pressed");
-                m.startGame();
-
                 frame.setVisible(false);
-
+                m.startGame();
                 // frame.dispose();
             }
         });
@@ -83,7 +81,7 @@ public class Setup {
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
                 System.out.println("Difficulty Slider has Moved");
-                difficultySliderReadout.setText("Target Accuracy: " + getTargetAccuracy() + "%");
+                difficultySliderReadout.setText("Target Accuracy: " + difficulty.getValue() + "%");
             }
         });
 
@@ -212,7 +210,7 @@ public class Setup {
 
     // accessor methods
     public Double getTargetAccuracy(){
-        return (Double) .01 * difficulty.getValue();
+        return .01 * difficulty.getValue();
     }
 
     public Player[] getTeamA(){return teamA;}

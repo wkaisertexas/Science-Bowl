@@ -5,6 +5,8 @@ import org.json.simple.JSONObject;
 public class Question {
     // Variables Declaration
 
+    // Question Variables
+
         public int questionId;
 
         public String category;
@@ -19,6 +21,22 @@ public class Question {
         public boolean bonusType; // false is shortAnswer, true is multipleChoice
         public String bonusQuestion;
         public String bonusAnswer;
+
+    // details about the who answered the question
+
+        // Tossup variables
+        public Player blurter; // most of these will be null
+
+        public Player incorrectInterupter; // most of these will be null
+
+        public Player staller;
+
+        public Player answeredCorrectly; // most of these will be null
+
+        public Player answeredIncorrectly;
+
+        // Bonus Variables
+        public boolean bonusCorrect;
 
     // end of variables declaration
 
@@ -58,4 +76,9 @@ public class Question {
         bonusAnswer = (String) q.get("bonus_answer");
     }
 
+    public JSONObject getSaveableQuestion(){ // this is how data will be stored in this time by storing it in a json question object array(Null for now)
+        // TODO: Complete saveable object class
+
+        return null;
+    }
 }

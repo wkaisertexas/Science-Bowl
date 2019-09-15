@@ -23,7 +23,7 @@ public class Main{
     public void startGame(){
         System.out.println("Starting Game");
         g = new Game(s.getTeamA(), s.getTeamB(), s.getDatabasePath(), s.getSaveLocation(), s.getTargetAccuracy(), this);
-
+        g.startGame();
     }
 
     public void gameComplete(){

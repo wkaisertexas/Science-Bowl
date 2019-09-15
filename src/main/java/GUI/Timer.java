@@ -27,8 +27,6 @@ public class Timer {
     }
 
 
-
-
     // mutator methods
 
     public void setBonusTeam(boolean team){
@@ -81,5 +79,21 @@ public class Timer {
 
     }
 
+    // Score setting methods
+    public void updateTeamAScore(int score) {
+        if (score < 10) {
+            teamAScoreLabel.setText("0" + score);
+        } else {
+            teamAScoreLabel.setText(score + "");
+        }
+    }
+
+    public void updateTeamBScore(int score){
+        if(score < 10) {
+            teamAScoreLabel.setText("0" + score);
+        } else {
+            teamAScoreLabel.setText(score + "");
+        }
+    }
 
 }
