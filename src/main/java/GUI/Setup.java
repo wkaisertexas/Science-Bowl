@@ -30,8 +30,10 @@ public class Setup {
     private JLabel bcLabel;
     private JTextField saveLocation;
     private JLabel saveLocationLabel;
+    private JButton selectFolder;
 
     private JFrame frame;
+    private JFileChooser fileChooser = new JFileChooser();
 
     public Main m;
 
@@ -48,9 +50,21 @@ public class Setup {
                 // This occurs when the selectFile file JButton is pressed
                 System.out.println("Select File Button Pressed");
 
-                // This will launch a separate window that will allow the user to launch the file
-                JOptionPane.showMessageDialog(null, "Sorry I haven't set this up yet. Will work on it when I have time");
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                fileChooser.showOpenDialog(frame);
 
+                databaseFilePath.setText(fileChooser.getSelectedFile().getPath());
+            }
+        });
+        selectFolder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.out.println("Select Folder Button Pressed");
+
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                fileChooser.showOpenDialog(frame);
+
+                saveLocation.setText(fileChooser.getSelectedFile().getPath());
             }
         });
         startGameButton.addActionListener(new ActionListener() {

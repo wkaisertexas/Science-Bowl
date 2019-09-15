@@ -5,7 +5,8 @@ import javax.swing.*;
 public class Help {
     private JPanel main;
     private JLabel title;
-    private JTextPane testingTextPane;
+    private JTextPane helpText;
+    private JTable keybinds;
 
     private JFrame frame;
 
@@ -18,4 +19,24 @@ public class Help {
     }
 
 
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+        String[] rowTitles = {"Key", "Use"};
+        String[][] keybindData = {
+                {"B", "Blurt Key Modifier"},
+                {"I", "Interrupt Key Modifier"},
+                {"C", "Conversing Penalty Key Modifier"},
+
+                {"Q", "A1"},
+                {"W", "AC"},
+                {"E", "A3"},
+                {"R", "A4"},
+
+                {"A", "B1"},
+                {"S", "BC"},
+                {"D", "B3"},
+                {"F", "B4"}
+        };
+        keybinds = new JTable(keybindData, rowTitles);
+    }
 }

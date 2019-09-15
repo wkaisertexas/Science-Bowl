@@ -29,6 +29,7 @@ public class Reader {
     private JLabel answer;
     private JTable teamATable;
     private JTable teamBTable;
+    private JLabel questionNumberLabel;
 
     private JFrame frame;
 
@@ -46,6 +47,8 @@ public class Reader {
         // this creates the JFrame
         frame = new JFrame("Reader Title");
         frame.setContentPane(this.main);
+        frame.pack();
+        frame.setVisible(true);
 
 
         helpButton.addActionListener(new ActionListener() {
@@ -60,8 +63,11 @@ public class Reader {
         this.aTeam = aTeam;
         this.bTeam = bTeam;
 
-        // these are the things that have to be done in order to finish all of the graphical user interface
-        setUpTables();
+        // this is just some test code
+        this.questionTimer.setValue(10000);
+
+
+
     }
 
 
@@ -90,6 +96,31 @@ public class Reader {
         question = q;
     }
 
+    public void highlightTeam(boolean team){
+        // false is Team A
+        // true is Team B
+        if(team){
+
+            // this fill fade out team A
+
+            // this will highlight team B
+
+
+        }else{
+
+        }
+
+
+    }
+
+
+    public void restHighlights(){
+        // this will just reset the highlights/ forgrounds to normal
+
+
+    }
+
+
 
 
 
@@ -99,21 +130,12 @@ public class Reader {
 
     public void updateTeamBScore(int score){}
 
-
-
-    // setup methods
-    public void setUpTables(){
-
-
-        // this sets up the Team B table
-
-
-
+    // Setup methods
+    private void createUIComponents() {
+        setUpTables();
     }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-
+    public void setUpTables(){
         // this will set up the dimensionality for table
         String[] columnNames = {"Position", "Name", "Positive Points", "Negative Points", "Overall Points"};
         // this sets up the Team A table
@@ -123,7 +145,20 @@ public class Reader {
                 {"A3", "", "", "", ""},
                 {"A4", "", "", "", ""}
         };
-        teamATable = new JTable(teamATableData, columnNames);
+        // there could be a way to get around this is we were able to use table models in order to set data
 
-    }
+        // this sets up the Team B table
+        String[][] teamBTableData = {
+                {"B1", "", "", "", ""},
+                {"BC", "", "", "", ""},
+                {"B3", "", "", "", ""},
+                {"B4", "", "", "", ""}
+        };
+
+        teamATable = new JTable(teamATableData, columnNames);
+        teamBTable = new JTable(teamBTableData, columnNames);
+    } // I need to make this so that it puts everyone's names in each spot
+
+
+
 }
