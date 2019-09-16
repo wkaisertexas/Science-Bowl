@@ -43,10 +43,10 @@ public class Reader implements KeyListener {
     public Help helper;
 
     // game variables
-    private Player[] aTeam = new Player[4];
-    private Player[] bTeam = new Player[4];
+    private Player[] aTeam;
+    private Player[] bTeam;
 
-    private String modifierKey; // this is a key for all of the actions (Nothing for correct) but others for each
+    private String modifierKey = ""; // this is a key for all of the actions (Nothing for correct) but others for each
 
     private Game g;
 
@@ -57,7 +57,6 @@ public class Reader implements KeyListener {
             public void actionPerformed(ActionEvent actionEvent) {
                 // This should call a separate frame that will load that will tell the user how to use the program
                 helper = new Help();
-
             }
         });
 
@@ -69,88 +68,17 @@ public class Reader implements KeyListener {
         frame = new JFrame("Reader Title");
         frame.setContentPane(this.main);
         frame.pack();
+        frame.addKeyListener(this);
+        main.addKeyListener(this);
+        statistics.addKeyListener(this);
+        teamATable.addKeyListener(this);
+        teamBTable.addKeyListener(this);
+        questionTextPane.addKeyListener(this);
         frame.setVisible(true);
-
         addPlayersNames();
     }
 
-    @Override
-    public void keyTyped(KeyEvent keyEvent) {
-        // DEBUG: code remove
-        System.out.println("Key typed: " + keyEvent.getKeyChar());
-
-        switch (keyEvent.getKeyCode()){
-            // cases for team A
-            case KeyEvent.VK_Q:
-                questionAnswered(aTeam[0], modifierKey, false);
-            case KeyEvent.VK_W:
-                questionAnswered(aTeam[1], modifierKey, false);
-            case KeyEvent.VK_E:
-                questionAnswered(aTeam[2], modifierKey, false);
-            case KeyEvent.VK_R:
-                questionAnswered(aTeam[3], modifierKey, false);
-
-            // cases for team B
-            case KeyEvent.VK_A:
-                questionAnswered(bTeam[0], modifierKey, true);
-            case KeyEvent.VK_S:
-                questionAnswered(bTeam[1], modifierKey, true);
-            case KeyEvent.VK_D:
-                questionAnswered(bTeam[2], modifierKey, true);
-            case KeyEvent.VK_F:
-                questionAnswered(bTeam[3], modifierKey, true);
-
-            default:
-                break;
-        }
-    }
-
     // mutator methods
-    @Override
-    public void keyPressed(KeyEvent keyEvent){
-        // this code will look at the key and it will check and see if it is one of the modifier keys
-        System.out.println("Testing");
-        switch (keyEvent.getKeyCode()){
-            case KeyEvent.VK_B:
-                modifierKey = "b";
-            case KeyEvent.VK_I:
-                modifierKey = "i";
-            case KeyEvent.VK_C:
-                modifierKey = "c";
-            case KeyEvent.VK_X:
-                modifierKey = "x";
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent keyEvent) {
-        // this will run some code to check if the modifier key has been released
-        switch (keyEvent.getKeyCode()){
-            case KeyEvent.VK_B:
-                // this checks to see if B was the previous modifier
-                if(modifierKey.equals("b")){
-                    modifierKey = "";
-                }
-            case KeyEvent.VK_I:
-                // this checks to see if I was the previous modifier
-                if(modifierKey.equals("i")){
-                    modifierKey = "";
-                }
-            case KeyEvent.VK_C:
-                // this checks to see if c was the previous modifier
-                if(modifierKey.equals("c")) {
-                    modifierKey = "";
-                }
-            case KeyEvent.VK_X:
-                // this checks to see if x was the previous modifier
-                if(modifierKey.equals("x")){
-                    modifierKey = "";
-                }
-            default:
-                break;
-        }
-    }
-
     public void questionAnswered(Player p, String modifierKey, boolean team){
         // team == false is team A
         // team == true is team B
@@ -159,41 +87,46 @@ public class Reader implements KeyListener {
             return; // in this case a typo was made by the user
         }
 
-        if(modifierKey.equals("b")){
-            question.blurter = p;
-            if(team){
-                // teamB
-                g.updateTeamBScore(-4);
-            } else{
-                // teamA
-                g.updateTeamAScore(-4);
-            }
-        } else if(modifierKey.equals("i")){
-            question.incorrectInterupter = p;
-            if(team){
-                // teamB
-                g.updateTeamBScore(-4);
-            } else{
-                // teamA
-                g.updateTeamAScore(-4);
-            }
-        } else if(modifierKey.equals("c")){
-            question.staller = p;
-        } else if(modifierKey.equals("x")){
-            question.answeredIncorrectly = p;
-        } else {
-            // this is the case when there is no modifying key meaning that the player go the things correct
-            question.answeredCorrectly = p;
-            if(team){
-                // this is the case for team B
-                g.updateTeamBScore(4);
-            } else{
-                // this is the case for teamA
-                g.updateTeamAScore(4);
-            }
+        switch (modifierKey) {
+            case "b":
+                question.blurter = p;
+                if (team) {
+                    // teamB
+                    g.updateTeamBScore(-4);
+                } else {
+                    // teamA
+                    g.updateTeamAScore(-4);
+                }
+                break;
+            case "i":
+                question.incorrectInterupter = p;
+                if (team) {
+                    // teamB
+                    g.updateTeamBScore(-4);
+                } else {
+                    // teamA
+                    g.updateTeamAScore(-4);
+                }
+                break;
+            case "c":
+                question.staller = p;
+                break;
+            case "x":
+                question.answeredIncorrectly = p;
+                break;
+            default:
+                // this is the case when there is no modifying key meaning that the player go the things correct
+                question.answeredCorrectly = p;
+                if (team) {
+                    // this is the case for team B
+                    g.updateTeamBScore(4);
+                } else {
+                    // this is the case for teamA
+                    g.updateTeamAScore(4);
+                }
 
-            // TODO: Implement a method here that will either go to the bonus or to the next question (We know that this is a tossup because this is the only thing where tossups are available (Have to add some code to make sure this only works for tossups
-            goToBonus(team);
+                goToBonus(team);
+                break;
         }
 
     }
@@ -221,6 +154,9 @@ public class Reader implements KeyListener {
     public void goToBonus(boolean team){
         // TODO: find some way to implement score changes for bonuses
 
+        // this changes the question mode to bonus
+        tossup = false; // this makes it so none of the rules that govern tossups apply when it is time to use a bonus
+        // TODO: Implements stuff mentioned above into keycodes
 
         // this will highlight the team answering the bonus question
         highlightTeam(team);
@@ -321,5 +257,84 @@ public class Reader implements KeyListener {
         }
     }
 
+    @Override
+    public void keyTyped(KeyEvent keyEvent) {
+        // DEBUG: code remove
+        char event = keyEvent.getKeyChar();
+        switch (event){
+            // cases for team A
+            case 'q':
+                System.out.println("Q case recognized");
+                questionAnswered(aTeam[0], modifierKey, false);
+            case 'w':
+                questionAnswered(aTeam[1], modifierKey, false);
+            case 'e':
+                questionAnswered(aTeam[2], modifierKey, false);
+            case 'r':
+                questionAnswered(aTeam[3], modifierKey, false);
+
+                // cases for team B
+            case 'a':
+                questionAnswered(bTeam[0], modifierKey, true);
+            case 's':
+                questionAnswered(bTeam[1], modifierKey, true);
+            case 'd':
+                questionAnswered(bTeam[2], modifierKey, true);
+            case 'f':
+                questionAnswered(bTeam[3], modifierKey, true);
+
+            default:
+                System.err.println("Key not recognized");
+                break;
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+        // this code will look at the key and it will check and see if it is one of the modifier keys
+        char event = keyEvent.getKeyChar();
+        switch (event){
+            case 'b':
+                modifierKey = "b";
+            case 'i':
+                modifierKey = "i";
+            case 'c':
+                modifierKey = "c";
+            case 'x':
+                modifierKey = "x";
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent keyEvent) {
+        // this will run some code to check if the modifier key has been released
+        char event = keyEvent.getKeyChar();
+        switch (event){
+            case 'b':
+                // this checks to see if B was the previous modifier
+                if(modifierKey.equals("b")){
+                    modifierKey = "";
+                }
+            case 'i':
+                // this checks to see if I was the previous modifier
+                if(modifierKey.equals("i")){
+                    modifierKey = "";
+                }
+            case 'c':
+                // this checks to see if c was the previous modifier
+                if(modifierKey.equals("c")) {
+                    modifierKey = "";
+                }
+            case 'x':
+                // this checks to see if x was the previous modifier
+                if(modifierKey.equals("x")){
+                    modifierKey = "";
+                }
+            default:
+                break;
+        }
+    }
+
+    // shortcut listener
 
 }
