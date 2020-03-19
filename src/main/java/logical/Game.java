@@ -4,6 +4,8 @@ import GUI.Reader;
 import GUI.Timer;
 import com.company.Main;
 
+import java.util.ArrayList;
+
 public class Game { // this will store all of the relevant information to a game
 
     public Player[] aTeam;
@@ -26,6 +28,10 @@ public class Game { // this will store all of the relevant information to a game
     public int teamBPosScore = 0;
     public int teamBNegScore = 0;
 
+    public int startTime;
+    public int[] pausingPoints;
+    public int[] resumingPoints;
+
     public Game(Player[] aTeam, Player[] bTeam, String databasePath, String saveLocationPath, double targetDifficulty, Main m){
         // this saves the player array
         this.aTeam = aTeam;
@@ -40,29 +46,30 @@ public class Game { // this will store all of the relevant information to a game
     }
 
     public void startGame(){
-        //TODO: find some way of making it so this loop does not cause a stall somewhere
+        questionNumber = 1;
+        startTime = System.currentTimeMilis();
+        nextQuestion();
+    }
 
-    // this sets up the question loop(This may not work well with halves)
-        for(int questionNumber = 1; questionNumber <= 25 && checkTimeLeft(); questionNumber++){
-            // this section of code should update the question number
-            r.setQuestionNumber(questionNumber);
-            // this should fetch a question from the generator
-            questions[questionNumber - 1] = gen.getQuestion();
-
-            // this should update the tossup question on the Reader's page
-            r.updateQuestion(questions[questionNumber - 1]);
-
-            // this is where I need to wait for whoever to answer it to answer it
+    public void action(String action){
+        // This needs to sort the string in order to see what kind of action it is
 
 
+    }
 
-
-
-
-
-
-
+    public void nextQuestion(){
+        if(questionNumber > 25 && !checkTimeLeft()){
+            endGame();
+            return;
         }
+
+        // this section of code should update the question number
+        r.setQuestionNumber(questionNumber);
+        // this should fetch a question from the generator
+        questions[questionNumber - 1] = gen.getQuestion();
+
+        // this should update the tossup question on the Reader's page
+        r.updateQuestion(questions[questionNumber - 1]);
 
     }
 
@@ -73,10 +80,77 @@ public class Game { // this will store all of the relevant information to a game
         m.gameComplete();
     }
 
+    public boolean pauseOrResumeGame(){
+        // For the prevention of errors
+        if(this.startTime == null){
+            System.err.println("Start Time null unable to pause game");
+            return false;
+        }
+
+        if(this.pausingPoints != null){
+            if(this.resumingPoints != null) {
+                if(pausingPoints.length > resumingPoints.length){
+                    // resume
+                    int[] newResumePoints = new int[resumingPoints.length + 1];
+                    for(int i = 0; i < resumingPoints.length; i++){
+                        newResumePoints[i] = resumingPoints[i];
+                    }
+                    newResumePoints[resumingPoints.length] = System.currentTimeMilis() - startTime; // TODO: Think about changing this to current time milis() - start time
+                    resumingPoints = newResumePoints;
+                    return false;
+                }else{
+                    // pause
+                    int[] newPausePoints = new int[pausingPoints.length + 1];
+                    for(int i = 0; i < pausingPoints.length; i++){
+                        newPausePoints[i] = resumingPoints[i];
+                    }
+                    newPausePoints[pausingPoints.length] = System.currentTimeMilis() - startTime;
+                    pausingPoints = newPausePoints;
+                    return true;
+                }
+            }else{
+                resumingPoints = new int[]{System.currentTimeMilis() - startTime};
+                return false;
+            }
+        }else{
+            pausingPoints = new int[]{System.currentTimeMilis() - startTime};
+            return true; // true is for paused false in not
+        }
+    }
+
 
     public boolean checkTimeLeft(){
-        // TODO: Add code here that will be able to check the amount of time left
-        return true;
+        return getTimeMilis() < 8 * 60 * 1000;
+    }
+
+    public int getTimeMilis(){
+        if(pausingPoints != null){
+            if(resumingPoints != null){
+                // This needs to check to see if the pauses and resumes are balanced
+                int pausingPointsSum = 0;
+                for(int point : pausingPoints){
+                    pausingPointsSum += point;
+                }
+
+                int resumingPointsSum = 0;
+                for(int point : resumingPoints){
+                    resumingPointsSum += point;
+                }
+
+                if(pausingPoints.length > resumingPoints.length){
+                    // resumed
+                    return pausingPointsSum - resumingPointsSum;
+                }else{
+                    // paused
+                    // this needs to take the sum of pausing points minus the sum of resuming points plus the sum of pausing points plus the current system time
+                    return pausingPointsSum - resumingPointsSum + System.currentTimeMilis();
+                }
+            }else{
+                return pausingPoints[0] - startTime;
+            }
+        }else{
+            return System.currentTimeMilis() - startTime;
+        }
     }
 
     public void updateScores(){

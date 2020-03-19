@@ -80,7 +80,6 @@ public class Setup {
             @Override
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
-                System.out.println("Difficulty Slider has Moved");
                 difficultySliderReadout.setText("Target Accuracy: " + difficulty.getValue() + "%");
             }
         });

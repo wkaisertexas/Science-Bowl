@@ -17,7 +17,7 @@ public class Logger { // the function of this class is to log all of the activit
     public Player[] teamA;
     public Player[] teamB;
 
-    String savesFolder;
+    public String savesFolder;
 
     Logger(String savesFolder){
         this.savesFolder = savesFolder;
@@ -45,16 +45,11 @@ public class Logger { // the function of this class is to log all of the activit
         String returnString = LocalDate.now().getYear() + "-";
         returnString += LocalDate.now().getMonth() + "-";
         returnString += LocalDate.now().getDayOfMonth() + ":";
-
-
-
-
-
-
-        return "";
+        returnString += "ScienceBowlMatch.json";
+        return returnString;
     }
 
     private String generateFilePath(){
-        return savesFolder + generateFileName();
+        return savesFolder + "/" + generateFileName();
     }
 }

@@ -39,6 +39,7 @@ public class Reader implements KeyListener {
 
     public Question question;
     public boolean tossup; // this keeps track of whether the current question being displayed is a tossup or a bonus
+    public boolean bonusTeam;
 
     public Help helper;
 
@@ -156,6 +157,7 @@ public class Reader implements KeyListener {
 
         // this changes the question mode to bonus
         tossup = false; // this makes it so none of the rules that govern tossups apply when it is time to use a bonus
+        bonusTeam = team;
         // TODO: Implements stuff mentioned above into keycodes
 
         // this will highlight the team answering the bonus question
@@ -261,6 +263,26 @@ public class Reader implements KeyListener {
     public void keyTyped(KeyEvent keyEvent) {
         // DEBUG: code remove
         char event = keyEvent.getKeyChar();
+
+        if(!tossup){
+            switch (event){
+                case ' ':
+                    // this is the case where the bonus was correct
+                    if (bonusTeam){
+                        // this means that team B has got the bonus correct
+
+                        // this updates the score
+                        g.updateTeamBScore(10);
+                    } else{
+                        // this means that team A has gotten the bonus correct
+
+                        // this updates the score
+                        g.updateTeamAScore(10);
+                    }
+
+            }
+        }
+
         switch (event){
             // cases for team A
             case 'q':
