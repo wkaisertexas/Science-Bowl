@@ -48,7 +48,7 @@ public class Reader implements KeyListener {
     private Player[] aTeam;
     private Player[] bTeam;
 
-    private String modifierKey = ""; // this is a key for all of the actions (Nothing for correct) but others for each
+    private char modifierKey; // this is a key for all of the actions (Nothing for correct) but others for each
 
     private Game g;
 
@@ -91,7 +91,7 @@ public class Reader implements KeyListener {
     }
 
     // mutator methods
-    public void questionAnswered(Player p, String modifierKey, boolean team){
+    public void questionAnswered(Player p, char modifierKey, boolean team){
         // team == false is team A
         // team == true is team B
         if(p == null){
@@ -100,8 +100,13 @@ public class Reader implements KeyListener {
         }
 
         switch (modifierKey) {
-            case "b":
-                question.blurter = p;
+            case 'b':
+                if(question.blurter == null){
+                    question.blurter = new Player[]{p};
+                }else{
+                    question.blurter = new Player[]{question.blurter[0], p};
+                }
+
                 if (team) {
                     // teamB
                     g.updateTeamBScore(-4);
@@ -110,8 +115,13 @@ public class Reader implements KeyListener {
                     g.updateTeamAScore(-4);
                 }
                 break;
-            case "i":
-                question.incorrectInterupter = p;
+            case 'i':
+                if(question.incorrectInterupter == null) {
+                    question.incorrectInterupter = new Player[]{p};
+                }else{
+                    question.incorrectInterupter = new Player[]{question.incorrectInterupter[0], p};
+                }
+
                 if (team) {
                     // teamB
                     g.updateTeamBScore(-4);
@@ -120,11 +130,19 @@ public class Reader implements KeyListener {
                     g.updateTeamAScore(-4);
                 }
                 break;
-            case "c":
-                question.staller = p;
+            case 'c':
+                if(question.staller == null) {
+                    question.staller = new Player[]{p};
+                }else{
+                    question.staller = new Player[]{question.staller[0], p};
+                }
                 break;
-            case "x":
-                question.answeredIncorrectly = p;
+            case 'x':
+                if(question.answeredIncorrectly == null) {
+                    question.answeredIncorrectly = new Player[]{p};
+                }else{
+                    question.answeredIncorrectly = new Player[]{question.answeredIncorrectly[0], p};
+                }
                 break;
             default:
                 // this is the case when there is no modifying key meaning that the player go the things correct
@@ -336,13 +354,13 @@ public class Reader implements KeyListener {
         char event = keyEvent.getKeyChar();
         switch (event){
             case 'b':
-                modifierKey = "b";
+                modifierKey = 'b';
             case 'i':
-                modifierKey = "i";
+                modifierKey = 'i';
             case 'c':
-                modifierKey = "c";
+                modifierKey = 'c';
             case 'x':
-                modifierKey = "x";
+                modifierKey = 'x';
         }
     }
 
@@ -353,23 +371,23 @@ public class Reader implements KeyListener {
         switch (event){
             case 'b':
                 // this checks to see if B was the previous modifier
-                if(modifierKey.equals("b")){
-                    modifierKey = "";
+                if(modifierKey == 'b'){
+                    modifierKey = '|';
                 }
             case 'i':
                 // this checks to see if I was the previous modifier
-                if(modifierKey.equals("i")){
-                    modifierKey = "";
+                if(modifierKey == 'i'){
+                    modifierKey = '|';
                 }
             case 'c':
                 // this checks to see if c was the previous modifier
-                if(modifierKey.equals("c")) {
-                    modifierKey = "";
+                if(modifierKey == 'c') {
+                    modifierKey = '|';
                 }
             case 'x':
                 // this checks to see if x was the previous modifier
-                if(modifierKey.equals("x")){
-                    modifierKey = "";
+                if(modifierKey == 'x'){
+                    modifierKey = '|';
                 }
             default:
                 break;

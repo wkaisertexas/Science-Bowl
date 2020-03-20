@@ -1,7 +1,10 @@
 package GUI;
 
+import kotlin.math.MathKt;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class TimerDisplay {
     private JLabel teamALabel;
@@ -16,18 +19,56 @@ public class TimerDisplay {
     private JFrame frame;
 
     public TimerDisplay(){
-
+        // adds a resize component listener
+        main.addComponentListener(
+          new ComponentAdapter(){
+              public void componentResized(ComponentEvent e) {
+                updateTextSize();
+              }
+          });
         // starts the JFrame
-        frame = new JFrame("Science Bowl Timer");
-        frame.setContentPane(this.main);
-        frame.pack();
-        frame.setVisible(true);
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] gs = ge.getScreenDevices();
 
+        if(gs.length == 1){ // I still need to make it go fullscreen
+            frame = new JFrame(gs[0].getDefaultConfiguration());
+        }else{
+            frame = new JFrame(gs[1].getDefaultConfiguration());
+
+            // This makes the frame full size
+            Rectangle bounds = gs[1].getDefaultConfiguration().getBounds();
+            frame.setSize(bounds.x, 1080);
+        }
+        // starts the JFrame
+        frame.setTitle("Science Bowl Timer");
+        frame.setContentPane(this.main);
+        updateTextSize();
+        frame.setVisible(true);
         setBonusTeam(false);
     }
 
 
     // mutator methods
+
+    public void updateTextSize(){
+        Font labelFont = roundTimer.getFont();
+        // Updating the timer
+        Dimension frameSize = frame.getSize();
+            // this needs to find the min of the width or the height for the resize
+            double minWidth = frameSize.getWidth() / 6;
+            double minHeight = frameSize.getHeight() / 5;
+
+            roundTimer.setFont(new Font(labelFont.getName(), Font.BOLD, MathKt.roundToInt(Math.min(minHeight, minWidth))));
+
+        // Updating the team 1 score
+            minWidth = frameSize.getWidth() / 24;
+            minHeight = frameSize.getHeight() / 4;
+        teamALabel.setFont(new Font(labelFont.getName(), Font.BOLD, MathKt.roundToInt(Math.min(minHeight, minWidth))));
+        teamBLabel.setFont(new Font(labelFont.getName(), Font.BOLD, MathKt.roundToInt(Math.min(minHeight, minWidth))));
+
+        teamAScoreLabel.setFont(new Font(labelFont.getName(), Font.BOLD, MathKt.roundToInt(Math.min(minHeight, minWidth * 4))));
+        teamBScoreLabel.setFont(new Font(labelFont.getName(), Font.BOLD, MathKt.roundToInt(Math.min(minHeight, minWidth * 4))));
+    }
 
     public void setBonusTeam(boolean team){
         // false is A
@@ -68,6 +109,9 @@ public class TimerDisplay {
     }
 
     public void startQuestionCountdownClock(boolean tossup){
+        // TODO: Migrate this method to be a part of game
+
+
         if(tossup){
             // tossup condition
 
