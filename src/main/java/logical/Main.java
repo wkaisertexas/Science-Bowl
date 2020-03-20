@@ -1,17 +1,15 @@
-package com.company;
+package logical;
 
 import GUI.Reader;
 import GUI.Setup;
-import GUI.Timer;
-
-import logical.Game;
+import GUI.TimerDisplay;
 
 public class Main{
     public Setup s;
     public Game g;
 
     public Reader r;
-    public Timer t;
+    public TimerDisplay t;
 
 
     private Main(){
@@ -38,5 +36,5 @@ public class Main{
 
 
 
-    public static void main(String[] args) throws InterruptedException{ Main m = new Main();}
+    public static void main(String[] args){ Main m = new Main();}
 }

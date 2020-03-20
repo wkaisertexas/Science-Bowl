@@ -1,6 +1,6 @@
 package GUI;
 
-import com.company.Main;
+import logical.Main;
 import logical.Player;
 
 import javax.swing.*;

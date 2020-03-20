@@ -1,10 +1,10 @@
 package logical;
 
 import GUI.Reader;
-import GUI.Timer;
-import com.company.Main;
+import GUI.TimerDisplay;
 
-import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Game { // this will store all of the relevant information to a game
 
@@ -15,7 +15,7 @@ public class Game { // this will store all of the relevant information to a game
 
     // this is all of the GUI variables
     public Reader r;
-    public Timer t;
+    public TimerDisplay t;
 
     private Main m;
 
@@ -28,9 +28,17 @@ public class Game { // this will store all of the relevant information to a game
     public int teamBPosScore = 0;
     public int teamBNegScore = 0;
 
-    public int startTime;
-    public int[] pausingPoints;
-    public int[] resumingPoints;
+
+    // New Way
+    public Timer roundTimer;
+    public TimerTask updateTime;
+
+    public Timer bonusTimer;
+
+    // Old Way
+    public long startTime;
+    public long[] pausingPoints;
+    public long[] resumingPoints;
 
     public Game(Player[] aTeam, Player[] bTeam, String databasePath, String saveLocationPath, double targetDifficulty, Main m){
         // this saves the player array
@@ -39,15 +47,27 @@ public class Game { // this will store all of the relevant information to a game
 
         gen = new Generator(databasePath, targetDifficulty);
 
+        // Creation of timer tasks
+        updateTime = new TimerTask(){
+          public void run(){
+              long timeMillis = 8 * 60 - getTimeMillis() / 1000;
+              r.setTimer(timeMillis);
+              t.setTimer(timeMillis);
+          }
+        };
+
         this.r = new Reader(aTeam, bTeam, this);
-        this.t = new Timer();
+        this.t = new TimerDisplay();
 
         this.m = m;
     }
 
     public void startGame(){
         questionNumber = 1;
-        startTime = System.currentTimeMilis();
+        startTime = System.currentTimeMillis();
+        roundTimer = new Timer("Round Timer");
+        roundTimer.scheduleAtFixedRate(updateTime, 30, 100);
+
         nextQuestion();
     }
 
@@ -74,66 +94,57 @@ public class Game { // this will store all of the relevant information to a game
     }
 
     public void endGame(){
-
-
         // this tells the main class that the game has ended
         m.gameComplete();
     }
 
-    public boolean pauseOrResumeGame(){
-        // For the prevention of errors
-        if(this.startTime == null){
-            System.err.println("Start Time null unable to pause game");
-            return false;
-        }
-
-        if(this.pausingPoints != null){
-            if(this.resumingPoints != null) {
+    public boolean pauseOrResumeGame(){ // TODO: Maybe add code so that this will log the pauses and starts to the data logger.
+        if(pausingPoints != null){
+            if(resumingPoints != null) {
                 if(pausingPoints.length > resumingPoints.length){
                     // resume
-                    int[] newResumePoints = new int[resumingPoints.length + 1];
+                    long[] newResumePoints = new long[resumingPoints.length + 1];
                     for(int i = 0; i < resumingPoints.length; i++){
                         newResumePoints[i] = resumingPoints[i];
                     }
-                    newResumePoints[resumingPoints.length] = System.currentTimeMilis() - startTime; // TODO: Think about changing this to current time milis() - start time
+                    newResumePoints[resumingPoints.length] = System.currentTimeMillis() - startTime;
                     resumingPoints = newResumePoints;
                     return false;
                 }else{
                     // pause
-                    int[] newPausePoints = new int[pausingPoints.length + 1];
+                    long[] newPausePoints = new long[pausingPoints.length + 1];
                     for(int i = 0; i < pausingPoints.length; i++){
                         newPausePoints[i] = resumingPoints[i];
                     }
-                    newPausePoints[pausingPoints.length] = System.currentTimeMilis() - startTime;
+                    newPausePoints[pausingPoints.length] = System.currentTimeMillis() - startTime;
                     pausingPoints = newPausePoints;
                     return true;
                 }
             }else{
-                resumingPoints = new int[]{System.currentTimeMilis() - startTime};
+                resumingPoints = new long[]{System.currentTimeMillis() - startTime};
                 return false;
             }
         }else{
-            pausingPoints = new int[]{System.currentTimeMilis() - startTime};
+            pausingPoints = new long[]{System.currentTimeMillis() - startTime};
             return true; // true is for paused false in not
         }
     }
 
-
     public boolean checkTimeLeft(){
-        return getTimeMilis() < 8 * 60 * 1000;
+        return getTimeMillis() < 8 * 60 * 1000;
     }
 
-    public int getTimeMilis(){
+    public long getTimeMillis(){
         if(pausingPoints != null){
             if(resumingPoints != null){
                 // This needs to check to see if the pauses and resumes are balanced
-                int pausingPointsSum = 0;
-                for(int point : pausingPoints){
+                long pausingPointsSum = 0;
+                for(long point : pausingPoints){
                     pausingPointsSum += point;
                 }
 
-                int resumingPointsSum = 0;
-                for(int point : resumingPoints){
+                long resumingPointsSum = 0;
+                for(long point : resumingPoints){
                     resumingPointsSum += point;
                 }
 
@@ -143,13 +154,13 @@ public class Game { // this will store all of the relevant information to a game
                 }else{
                     // paused
                     // this needs to take the sum of pausing points minus the sum of resuming points plus the sum of pausing points plus the current system time
-                    return pausingPointsSum - resumingPointsSum + System.currentTimeMilis();
+                    return pausingPointsSum - resumingPointsSum + System.currentTimeMillis() - startTime;
                 }
             }else{
-                return pausingPoints[0] - startTime;
+                return pausingPoints[0];
             }
         }else{
-            return System.currentTimeMilis() - startTime;
+            return System.currentTimeMillis() - startTime;
         }
     }
 

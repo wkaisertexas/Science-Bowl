@@ -34,6 +34,7 @@ public class Reader implements KeyListener {
     private JTable teamBTable;
     private JLabel questionNumberLabel;
     private JTextPane questionTextPane;
+    private JButton pauseResume;
 
     private JFrame frame;
 
@@ -59,6 +60,16 @@ public class Reader implements KeyListener {
                 // This should call a separate frame that will load that will tell the user how to use the program
                 helper = new Help();
             }
+        });
+
+        pauseResume.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent actionEvent){
+               if(g.pauseOrResumeGame()){
+                   pauseResume.setText("Resume");
+               }else{
+                   pauseResume.setText("Pause");
+               }
+           }
         });
 
         this.aTeam = aTeam;
@@ -211,6 +222,14 @@ public class Reader implements KeyListener {
 
     public void updateTeamBScore(int score){
         teamBScore.setText("Team B: " + score);
+    }
+
+    public void setTimer(long numberOfSecondsLeft){
+        if(numberOfSecondsLeft % 60 >= 10) {
+            timeLeft.setText("0" + Math.floorDiv(numberOfSecondsLeft, 60) + ":" + numberOfSecondsLeft % 60);
+        }else{
+            timeLeft.setText("0" + Math.floorDiv(numberOfSecondsLeft, 60) + ":0" + numberOfSecondsLeft % 60);
+        }
     }
 
     // Setup methods

@@ -3,7 +3,7 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 
-public class Timer {
+public class TimerDisplay {
     private JLabel teamALabel;
     private JLabel teamBLabel;
     private JLabel teamAScoreLabel;
@@ -15,7 +15,7 @@ public class Timer {
 
     private JFrame frame;
 
-    public Timer(){
+    public TimerDisplay(){
 
         // starts the JFrame
         frame = new JFrame("Science Bowl Timer");
@@ -59,8 +59,12 @@ public class Timer {
         teamBScoreLabel.setForeground(new Color(0,0,0));
     }
 
-    public void setTimer(int numberOfSecondsLeft){
-        roundTimer.setText(Math.floorDiv(numberOfSecondsLeft, 60)+ ":" + numberOfSecondsLeft%60);
+    public void setTimer(long numberOfSecondsLeft) {
+        if (numberOfSecondsLeft % 60 >= 10) {
+            roundTimer.setText("0" + Math.floorDiv(numberOfSecondsLeft, 60) + ":" + numberOfSecondsLeft % 60);
+        } else {
+            roundTimer.setText("0" + Math.floorDiv(numberOfSecondsLeft, 60) + ":" + "0" + numberOfSecondsLeft % 60);
+        }
     }
 
     public void startQuestionCountdownClock(boolean tossup){
