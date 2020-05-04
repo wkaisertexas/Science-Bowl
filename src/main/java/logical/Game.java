@@ -40,6 +40,9 @@ public class Game { // this will store all of the relevant information to a game
     public long[] pausingPoints;
     public long[] resumingPoints;
 
+    public long tossupStartTime = -1;
+    public long bonusStartTime = -1;
+
     public Game(Player[] aTeam, Player[] bTeam, String databasePath, String saveLocationPath, double targetDifficulty, Main m){
         // this saves the player array
         this.aTeam = aTeam;
@@ -50,9 +53,17 @@ public class Game { // this will store all of the relevant information to a game
         // Creation of timer tasks
         updateTime = new TimerTask(){
           public void run(){
-              long timeMillis = 8 * 60 - getTimeMillis() / 1000;
-              r.setTimer(timeMillis);
-              t.setTimer(timeMillis);
+              if(tossupStartTime != -1){
+                  r.setTimer(5 + (tossupStartTime - getTimeMillis()) / 1000);
+                  t.setTimer(5 + (tossupStartTime - getTimeMillis()) / 1000);
+              }else if(bonusStartTime != -1){
+                  r.setTimer(20 + (bonusStartTime - getTimeMillis()) / 1000);
+                  t.setTimer(20 + (bonusStartTime - getTimeMillis()) / 1000);
+              }else{
+                  long timeMillis = 8 * 60 - getTimeMillis() / 1000;
+                  r.setTimer(timeMillis);
+                  t.setTimer(timeMillis);
+              }
           }
         };
 
@@ -63,21 +74,19 @@ public class Game { // this will store all of the relevant information to a game
     }
 
     public void startGame(){
-        questionNumber = 1;
+        questionNumber = 0; // This starts at zeros so it can be incremented later
         startTime = System.currentTimeMillis();
         roundTimer = new Timer("Round Timer");
         roundTimer.scheduleAtFixedRate(updateTime, 30, 100);
+        // this pauses the game to start off with
+        pauseOrResumeGame();
 
         nextQuestion();
     }
 
-    public void action(String action){
-        // This needs to sort the string in order to see what kind of action it is
-
-
-    }
-
     public void nextQuestion(){
+        questionNumber++;
+
         if(questionNumber > 25 && !checkTimeLeft()){
             endGame();
             return;
@@ -128,7 +137,7 @@ public class Game { // this will store all of the relevant information to a game
             pausingPoints = new long[]{System.currentTimeMillis() - startTime};
             return true; // true is for paused false in not
         }
-    }
+    } // NOTE: This only modifies the game time I need to add to it to make it modify the tossup and bonus times
 
     public boolean checkTimeLeft(){
         return getTimeMillis() < 8 * 60 * 1000;
@@ -190,6 +199,15 @@ public class Game { // this will store all of the relevant information to a game
             teamBNegScore += score;
         }
         updateScores();
+    }
+
+    // Timing methods
+    public void startTossupTimer(){
+        tossupStartTime = getTimeMillis();
+    }
+
+    public void startBonusTimer(){
+        bonusStartTime = getTimeMillis();
     }
 
     // summary statistics(This will contain methods that will get general summary statistics for the game)

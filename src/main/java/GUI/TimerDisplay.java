@@ -1,6 +1,6 @@
 package GUI;
 
-import kotlin.math.MathKt;
+import org.apache.velocity.runtime.parser.node.MathUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -57,17 +57,16 @@ public class TimerDisplay {
             // this needs to find the min of the width or the height for the resize
             double minWidth = frameSize.getWidth() / 6;
             double minHeight = frameSize.getHeight() / 5;
-
-            roundTimer.setFont(new Font(labelFont.getName(), Font.BOLD, MathKt.roundToInt(Math.min(minHeight, minWidth))));
+        roundTimer.setFont(new Font(labelFont.getName(), Font.BOLD, (int)Math.round(Math.min(minHeight, minWidth))));
 
         // Updating the team 1 score
             minWidth = frameSize.getWidth() / 24;
             minHeight = frameSize.getHeight() / 4;
-        teamALabel.setFont(new Font(labelFont.getName(), Font.BOLD, MathKt.roundToInt(Math.min(minHeight, minWidth))));
-        teamBLabel.setFont(new Font(labelFont.getName(), Font.BOLD, MathKt.roundToInt(Math.min(minHeight, minWidth))));
+        teamALabel.setFont(new Font(labelFont.getName(), Font.BOLD, (int)Math.round(Math.min(minHeight, minWidth))));
+        teamBLabel.setFont(new Font(labelFont.getName(), Font.BOLD, (int)Math.round(Math.min(minHeight, minWidth))));
 
-        teamAScoreLabel.setFont(new Font(labelFont.getName(), Font.BOLD, MathKt.roundToInt(Math.min(minHeight, minWidth * 4))));
-        teamBScoreLabel.setFont(new Font(labelFont.getName(), Font.BOLD, MathKt.roundToInt(Math.min(minHeight, minWidth * 4))));
+        teamAScoreLabel.setFont(new Font(labelFont.getName(), Font.BOLD, (int) Math.round(Math.min(minHeight, minWidth * 4))));
+        teamBScoreLabel.setFont(new Font(labelFont.getName(), Font.BOLD, (int) Math.round(Math.min(minHeight, minWidth * 4))));
     }
 
     public void setBonusTeam(boolean team){

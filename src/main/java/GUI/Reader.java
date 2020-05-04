@@ -48,7 +48,7 @@ public class Reader implements KeyListener {
     private Player[] aTeam;
     private Player[] bTeam;
 
-    private char modifierKey; // this is a key for all of the actions (Nothing for correct) but others for each
+    private char modifierKey = '|'; // this is a key for all of the actions (Nothing for correct) but others for each
 
     private Game g;
 
@@ -77,7 +77,13 @@ public class Reader implements KeyListener {
         this.g = g;
 
         // this creates the JFrame
+
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] gs = ge.getScreenDevices();
+        Rectangle bounds = gs[0].getDefaultConfiguration().getBounds();
+
         frame = new JFrame("Reader Title");
+        frame.setSize(bounds.x, bounds.y);
         frame.setContentPane(this.main);
         frame.pack();
         frame.addKeyListener(this);
@@ -95,7 +101,7 @@ public class Reader implements KeyListener {
         // team == false is team A
         // team == true is team B
         if(p == null){
-            System.err.println("Typed in the Wrong Key");
+            System.err.println("No player at that given key");
             return; // in this case a typo was made by the user
         }
 
@@ -257,26 +263,31 @@ public class Reader implements KeyListener {
 
     public void setUpTables(){
         // this will set up the dimensionality for table
-        String[] columnNames = {"Position", "Name", "Positive Points", "Negative Points", "Overall Points"};
+        String[] columnNames = {"Position", "First Name", "Last Name", "Positive Points", "Negative Points", "Overall Points"};
         // this sets up the Team A table
         String[][] teamATableData = {
-                {"A1", "", "", "", ""},
-                {"AC", "", "", "", ""},
-                {"A3", "", "", "", ""},
-                {"A4", "", "", "", ""}
+                {"A1", "", "", "", "", ""},
+                {"AC", "", "", "", "", ""},
+                {"A3", "", "", "", "", ""},
+                {"A4", "", "", "", "", ""}
         };
         // there could be a way to get around this is we were able to use table models in order to set data
 
         // this sets up the Team B table
         String[][] teamBTableData = {
-                {"B1", "", "", "", ""},
-                {"BC", "", "", "", ""},
-                {"B3", "", "", "", ""},
-                {"B4", "", "", "", ""}
+                {"B1", "", "", "", "", ""},
+                {"BC", "", "", "", "", ""},
+                {"B3", "", "", "", "", ""},
+                {"B4", "", "", "", "", ""}
         };
 
         teamATable = new JTable(teamATableData, columnNames);
         teamBTable = new JTable(teamBTableData, columnNames);
+
+        // TODO: Make the table non-editable
+
+        // TODO: Make the table add the column names
+
     } // I need to make this so that it puts everyone's names in each spot
 
     public void addPlayersNames(){
@@ -285,6 +296,10 @@ public class Reader implements KeyListener {
         for(int i = 0; i < aTeam.length; i++){
             if(aTeam[i] != null){
                 teamATable.setValueAt(aTeam[i].first, i, 1);
+                teamATable.setValueAt(aTeam[i].last, i, 2);
+                teamATable.setValueAt("0", i, 3);
+                teamATable.setValueAt("0", i, 4);
+                teamATable.setValueAt("0", i, 5);
             }
         }
 
@@ -292,6 +307,10 @@ public class Reader implements KeyListener {
         for(int i = 0; i < bTeam.length; i++){
             if(bTeam[i] != null){
                 teamBTable.setValueAt(bTeam[i].first, i, 1);
+                teamBTable.setValueAt(bTeam[i].last, i, 2);
+                teamBTable.setValueAt("0", i, 3);
+                teamBTable.setValueAt("0", i, 4);
+                teamBTable.setValueAt("0", i, 5);
             }
         }
     }
@@ -303,7 +322,7 @@ public class Reader implements KeyListener {
 
         if(!tossup){
             switch (event){
-                case ' ':
+                case 'c':
                     // this is the case where the bonus was correct
                     if (bonusTeam){
                         // this means that team B has got the bonus correct
@@ -317,6 +336,12 @@ public class Reader implements KeyListener {
                         g.updateTeamAScore(10);
                     }
 
+                    g.nextQuestion();
+                case 'x':
+                    // this is the case where the tossup is incorrect
+                    g.nextQuestion();
+                default:
+                    break;
             }
         }
 
@@ -395,5 +420,4 @@ public class Reader implements KeyListener {
     }
 
     // shortcut listener
-
 }

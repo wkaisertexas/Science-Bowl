@@ -1,6 +1,6 @@
 package logical;
 
-import com.google.gson.JsonObject;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 

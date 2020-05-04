@@ -22,7 +22,6 @@ public class Help {
     private void createUIComponents() {
         String[] rowTitles = {"Key", "Use"};
         String[][] keybindData = {
-                {"Space", "Pause / Resume"},
                 {"B", "Blurt Key Modifier"},
                 {"I", "Interrupt Key Modifier"},
                 {"C", "Conversing Penalty Key Modifier"},
